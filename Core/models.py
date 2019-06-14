@@ -1,11 +1,14 @@
 from django.db import models
+
+# Create your models here.
+from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime, timedelta
 
 
 class Personnel (models.Model):
-    ID_Personnel = models.IntegerField(primary_key=True)  # - INT
+    ID_Personnel = models.IntegerField(primary_key=True, default=0)  # - INT
     First_Name = models.CharField(max_length=20)  # - CHAR 20
     Last_Name = models.CharField(max_length=20)  # - CHAR 20
     Position = models.CharField(max_length=20)  # - CHAR 20)
@@ -34,8 +37,12 @@ class Vendor(models.Model):
 class Project(models.Model):
     ID_Project = models.IntegerField(primary_key=True)
     Title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=255)
     Description = models.TextField(blank=True)
+    DEFAULT_PROJECT_MANAGER_ID = 0
+    Project_Manager = models.ForeignKey(
+        to=Personnel, on_delete=models.DO_NOTHING, default=0)
+    Total_Mandays = models.IntegerField(blank=False, default=0)
     Start_Date = models.DateField(blank=False)
     End_Date = models.DateField(blank=False)
     Created_On = models.DateTimeField(auto_now_add=True)
@@ -48,7 +55,7 @@ class Project(models.Model):
 
 class ProjectTask(models.Model):
     ID_Task = models.IntegerField(primary_key=True)
-    ID_Project = models.ForeignKey('Project', on_delete=models.SET(0))
+    ID_Project = models.ForeignKey('Project', on_delete=models.CASCADE)
     Priority_level = [
         ('H', 'HIGH'),
         ('M', 'MEDIUM'),
@@ -113,7 +120,7 @@ class ActivityLog(models.Model):
 
 class DetailActivity(models.Model):
     ID_ProjectTask = models.ForeignKey(
-        to='ProjectTask', on_delete=models.SET(0))
+        to='ProjectTask', on_delete=models.DO_NOTHING)
     ID_Activity = models.ForeignKey(to='ActivityLog', on_delete=models.CASCADE)
     Description = models.CharField(max_length=500)
     Loc_Options = [
