@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} Welcome to Activity Online Sheet {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+          <form action='/login/' method='POST' id='loginForm'>
+            {% csrf_token %}            
+            <h1>Login</h1>
+            <div>
+              <input type="text" name='username' class="form-control" placeholder="Username" required="" />
+            </div>
+            <div>
+              <input type="password" name='password' class="form-control" placeholder="Password" required="" />
+            </div>      
+            <div>
+              <button class='btn btn-default submit' type="submit" form="loginForm" value="Submit">Log in</button>
+              {% comment %} <a class="reset_pass" href="#">Lost your password?</a> {% endcomment %}
+            </div>
+            <div>
+              <p class="error">{{errMessage}}</p>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              
+              <div class="clearfix"></div>
+              <br />
+
+              <div>
+                <h1>Welcome to ActOS!</h1>
+                <p>©2019 All Rights Reserved. CKS-KHO</p>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

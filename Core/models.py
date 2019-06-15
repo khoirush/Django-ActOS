@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 from django.db import models
 from django.utils.text import slugify
@@ -39,9 +39,8 @@ class Project(models.Model):
     Title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
     Description = models.TextField(blank=True)
-    DEFAULT_PROJECT_MANAGER_ID = 0
-    Project_Manager = models.ForeignKey(
-        to=Personnel, on_delete=models.DO_NOTHING, default=0)
+    # Project_Manager = models.ForeignKey(
+    #     to=Personnel, on_delete=models.DO_NOTHING, default=0, null=True)
     Total_Mandays = models.IntegerField(blank=False, default=0)
     Start_Date = models.DateField(blank=False)
     End_Date = models.DateField(blank=False)
@@ -102,6 +101,7 @@ class ProjectAssignment(models.Model):
         to='Personnel', on_delete=models.PROTECT)
     ID_Project = models.ForeignKey(
         to='Project', on_delete=models.PROTECT)
+    is_PM = models.BooleanField(default=False)
     Start_Date = models.DateField(blank=False)
     End_Date = models.DateField(blank=False)
     Created_On = models.DateTimeField(auto_now_add=True)
@@ -114,6 +114,7 @@ class ActivityLog(models.Model):
     ID_Personnel = models.ForeignKey(to='Personnel', on_delete=models.CASCADE)
     ID_Assignment = models.ForeignKey(
         to='ProjectAssignment', on_delete=models.CASCADE)
+    is_Approve = models.BooleanField(default=False)
     Created_On = models.DateTimeField(auto_now_add=True)
     Last_Update = models.DateTimeField(auto_now=True)
 
@@ -133,3 +134,8 @@ class DetailActivity(models.Model):
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
     Created_On = models.DateTimeField(auto_now_add=True)
     Last_Update = models.DateTimeField(auto_now=True)
+
+
+class UserPersonnel(models.Model):
+    ID_User = models.OneToOneField(User, on_delete=models.CASCADE)
+    ID_Personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)

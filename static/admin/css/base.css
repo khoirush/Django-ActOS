@@ -187,6 +187,11 @@ p.mini {
     margin-top: -3px;
 }
 
+p.error{
+    color: #930;
+    font-size: 11px;
+}
+
 .help, p.help, form p.help, div.help, form div.help, div.help li {
     font-size: 11px;
     color: #999;
