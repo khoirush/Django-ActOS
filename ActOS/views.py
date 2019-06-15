@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from Core.models import User, UserPersonnel, Personnel
+from Core.models import User, UserPersonnel, Personnel, Project, ProjectTask
 from django.http import HttpResponse, HttpRequest
 
 
@@ -57,7 +57,16 @@ def home_page(request):
         context['lname'] = obj_personnel.Last_Name
         context['fullname'] = str(obj_personnel.First_Name) + \
             str(obj_personnel.Last_Name)
-    return render(request, 'homepage.html', {'context': context})
+
+        # get project object
+        projects = []
+        projects = Project.objects.all()
+        project_tasks = {}
+        for p in projects:
+            idx = p.ID_Project
+            project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
+    # breakpoint()
+    return render(request, 'homepage.html', {'context': context, 'Projects': projects, 'Tasks': project_tasks})
 
 
 def handler404(request, exception):
