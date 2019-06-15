@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 class Personnel (models.Model):
@@ -74,7 +74,6 @@ class ProjectTask(models.Model):
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
     PctWeight = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
-    CreateDate = models.CharField(max_length=255)
     Start_Date = models.DateField(blank=False)
     TargetFinish_Date = models.DateField(blank=False)
     Target_Duration = models.IntegerField(default=0)
@@ -86,8 +85,8 @@ class ProjectTask(models.Model):
 
     def save(self, *args, **kwargs):
         # subject to Re-Check / Validate Result of Target_Duration
-        d1 = datetime.strptime(self.Start_Date, '%Y-%m-%d')
-        d2 = datetime.strptime(self.TargetFinish_Date, '%Y-%m-%d')
+        d1 = date.fromisoformat(str(self.Start_Date))
+        d2 = date.fromisoformat(str(self.TargetFinish_Date))
         delta = d2-d1
         self.Target_Duration = delta.days
         self.Total_Mandays = len(

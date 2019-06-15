@@ -19,8 +19,12 @@ from . import views
 
 urlpatterns = [
     path('', views.login_page, name='index'),
+    path('home/', views.home_page),
     path('logout/', views.logout_view),
     path('login/', views.login_view),
     path('ActOS/', include('Core.urls')),
     path('admin/', admin.site.urls),
 ]
+
+handler404 = views.handler404
+handler500 = views.handler500
