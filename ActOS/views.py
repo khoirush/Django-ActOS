@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from Core.models import User, UserPersonnel, Personnel, Project, ProjectTask
 from django.http import HttpResponse, HttpRequest
+from Core.forms import *
+from django.utils import timezone
 
 
 def landingPage(request):
@@ -15,6 +17,23 @@ def login_page(request):
 def logout_view(request):
     logout(request)
     return login_page(request)
+
+
+def get_user_context(request):
+    context = {}
+    if request.user.is_authenticated:
+        user = request.user
+        obj_user = User.objects.get(username=user.username)
+        obj_UserPerson = UserPersonnel.objects.get(ID_User=obj_user.id)
+        idp = int(obj_UserPerson.ID_Personnel_id)
+        obj_personnel = Personnel.objects.get(
+            ID_Personnel=idp)
+        context = {}
+        context['fname'] = obj_personnel.First_Name
+        context['lname'] = obj_personnel.Last_Name
+        context['fullname'] = str(obj_personnel.First_Name) + \
+            str(obj_personnel.Last_Name)
+    return context
 
 
 def login_view(request):
@@ -45,19 +64,8 @@ def login_view(request):
 
 
 def home_page(request):
-    user = request.user
-    if user is not None:
-        obj_user = User.objects.get(username=user.username)
-        obj_UserPerson = UserPersonnel.objects.get(ID_User=obj_user.id)
-        idp = int(obj_UserPerson.ID_Personnel_id)
-        obj_personnel = Personnel.objects.get(
-            ID_Personnel=idp)
-        context = {}
-        context['fname'] = obj_personnel.First_Name
-        context['lname'] = obj_personnel.Last_Name
-        context['fullname'] = str(obj_personnel.First_Name) + \
-            str(obj_personnel.Last_Name)
-
+    context = get_user_context(request)
+    if context:
         # get project object
         projects = []
         projects = Project.objects.all()
@@ -65,8 +73,11 @@ def home_page(request):
         for p in projects:
             idx = p.ID_Project
             project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
+        context['Projects'] = projects
+        context['Tasks'] = project_tasks
+        return render(request, 'homepage.html', context)
     # breakpoint()
-    return render(request, 'homepage.html', {'context': context, 'Projects': projects, 'Tasks': project_tasks})
+    return login_page(request)
 
 
 def handler404(request, exception):

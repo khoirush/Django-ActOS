@@ -49,9 +49,9 @@ class ActivityLogAdmin(admin.ModelAdmin):
                           'ID_Personnel', 'ID_Assignment')
 
 
-class DetailActivityAdmin(admin.ModelAdmin):
-    list_display = ('ID_ProjectTask', 'ID_Activity', 'Description')
-    list_display_links = ('ID_ProjectTask', 'ID_Activity', 'Description')
+# class DetailActivityAdmin(admin.ModelAdmin):
+#     list_display = ('ID_ProjectTask', 'ID_Activity', 'Description')
+#     list_display_links = ('ID_ProjectTask', 'ID_Activity', 'Description')
 
 
 class UserPersonnelAdmin(admin.ModelAdmin):
@@ -66,5 +66,5 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectTask, ProjectTaskAdmin)
 admin.site.register(ProjectAssignment, ProjectAssignmentAdmin)
 admin.site.register(ActivityLog, ActivityLogAdmin)
-admin.site.register(DetailActivity, DetailActivityAdmin)
+# admin.site.register(DetailActivity, DetailActivityAdmin)
 admin.site.register(UserPersonnel, UserPersonnelAdmin)

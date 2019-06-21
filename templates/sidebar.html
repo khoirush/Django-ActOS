@@ -1,6 +1,6 @@
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
-    <a href="index.html" class="site_title"><i class="fa fa-spinner"></i> <span>ActOS | CKS</span></a>
+    <a href="{% url 'home' %}" class="site_title"><i class="fa fa-spinner"></i> <span>ActOS | CKS</span></a>
   </div>
 
   <div class="clearfix"></div>
@@ -15,8 +15,8 @@
         <h2>Activity Online Sheet</h2>
       </span>
       <h4>
-        {{context.fname}}
-        {{context.lname}}
+        {{fname}}
+        {{lname}}
       </h4>
     </div>
   </div>
@@ -29,27 +29,27 @@
     <div class="menu_section">
       <h3>Log Your Activity Now</h3>
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-home"></i> Home </a>
+        <li><a href="{% url 'home' %}"><i class="fa fa-home"></i> Home </a>
         </li>
         <li><a><i class="fa fa-edit"></i> Activity Log <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="input_activity.html">Input Activity</a></li>
-            <li><a href="view_activity.html">View Activity</a></li>
-            <li><a href="approve_activity.html">Approve Activity Sheet</a></li>
+            <li><a href="/ActOS/InputAct">Input Activity</a></li>
+            <li><a href="/ActOS/view_activity.html">View Activity</a></li>
+            <li><a href="/ActOS/approve_activity.html">Approve Activity Sheet</a></li>
           </ul>
         </li>
         <li><a><i class="fa fa-desktop"></i> Projects <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="project_adm.html">Project Administration</a></li>
-            <li><a href="task_adm.html">Task Administration</a></li>
-            <li><a href="project_assignment.html">Personnel Assignment</a></li>
-            <li><a href="project_progress.html">Update Project Progress</a></li>
+            <li><a href="{% url 'Core:project_index' %}">Project Administration</a></li>
+            <li><a href="/ActOS/task_adm.html">Task Administration</a></li>
+            <li><a href="/ActOS/project_assignment.html">Personnel Assignment</a></li>
+            <li><a href="/ActOS/project_progress.html">Update Project Progress</a></li>
           </ul>
         </li>
         <li><a><i class="fa fa-bar-chart-o"></i> Monitoring Dashboard <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="tables.html">Monitor Project Progress</a></li>
-            <li><a href="tables_dynamic.html">Monitor Project Allowance</a></li>
+            <li><a href="/ActOS/tables.html">Monitor Project Progress</a></li>
+            <li><a href="/ActOS/tables_dynamic.html">Monitor Project Allowance</a></li>
           </ul>
         </li>
       </ul>

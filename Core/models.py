@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
+from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime, timedelta, date
+
+# Create your models here.
 
 
 class Personnel (models.Model):
@@ -25,17 +27,17 @@ class Personnel (models.Model):
 
 
 class Customer(models.Model):
-    ID_Customer = models.IntegerField(primary_key=True)
+    ID_Customer = models.AutoField(primary_key=True)
     Customer_Name = models.CharField(max_length=50)
 
 
 class Vendor(models.Model):
-    ID_Vendor = models.IntegerField(primary_key=True)
+    ID_Vendor = models.AutoField(primary_key=True)
     Vendor_Name = models.CharField(max_length=50)
 
 
 class Project(models.Model):
-    ID_Project = models.IntegerField(primary_key=True)
+    ID_Project = models.AutoField(primary_key=True)
     Title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
     Description = models.TextField(blank=True)
@@ -51,9 +53,12 @@ class Project(models.Model):
         self.slug = slugify(self.Title)
         super(Project, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('Core:project_index')
+
 
 class ProjectTask(models.Model):
-    ID_Task = models.IntegerField(primary_key=True)
+    ID_Task = models.AutoField(primary_key=True)
     ID_Project = models.ForeignKey('Project', on_delete=models.CASCADE)
     Priority_level = [
         ('H', 'HIGH'),
@@ -95,7 +100,7 @@ class ProjectTask(models.Model):
 
 
 class ProjectAssignment(models.Model):
-    ID_Assignment = models.IntegerField()
+    ID_Assignment = models.CharField(max_length=10)
     ID_Personnel = models.ForeignKey(
         to='Personnel', on_delete=models.PROTECT)
     ID_Project = models.ForeignKey(
@@ -108,31 +113,40 @@ class ProjectAssignment(models.Model):
 
 
 class ActivityLog(models.Model):
-    ID_Activity = models.IntegerField(primary_key=True)
+    ID_Activity = models.AutoField(primary_key=True)
     Activity_Date = models.DateField(blank=False, unique=True)
     ID_Personnel = models.ForeignKey(to='Personnel', on_delete=models.CASCADE)
     ID_Assignment = models.ForeignKey(
         to='ProjectAssignment', on_delete=models.CASCADE)
-    is_Approve = models.BooleanField(default=False)
-    Created_On = models.DateTimeField(auto_now_add=True)
-    Last_Update = models.DateTimeField(auto_now=True)
-
-
-class DetailActivity(models.Model):
     ID_ProjectTask = models.ForeignKey(
         to='ProjectTask', on_delete=models.DO_NOTHING)
-    ID_Activity = models.ForeignKey(to='ActivityLog', on_delete=models.CASCADE)
-    Description = models.CharField(max_length=500)
+    Description = models.TextField(blank=True)
     Loc_Options = [
         ('R', 'Remote'),
         ('O', 'Office'),
         ('C', 'Customer Site')
     ]
     Location = models.CharField(max_length=1, choices=Loc_Options, default='O')
-    PctTaskComplete = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
+    is_Approve = models.BooleanField(default=False)
     Created_On = models.DateTimeField(auto_now_add=True)
     Last_Update = models.DateTimeField(auto_now=True)
+
+
+# class DetailActivity(models.Model):
+#     ID_ProjectTask = models.ForeignKey(
+#         to='ProjectTask', on_delete=models.DO_NOTHING)
+#     ID_Activity = models.ForeignKey(to='ActivityLog', on_delete=models.CASCADE)
+#     Description = models.CharField(max_length=500)
+#     Loc_Options = [
+#         ('R', 'Remote'),
+#         ('O', 'Office'),
+#         ('C', 'Customer Site')
+#     ]
+#     Location = models.CharField(max_length=1, choices=Loc_Options, default='O')
+#     PctTaskComplete = models.FloatField(
+#         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
+#     Created_On = models.DateTimeField(auto_now_add=True)
+#     Last_Update = models.DateTimeField(auto_now=True)
 
 
 class UserPersonnel(models.Model):

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if not form.instance.pk %}
+Create New Project
+{% else %}
+Update Project
+{% endif %}
+{% endblock title %}
+
+{% block stylesheets %}
+{{block.super}}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Create New Project</h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_content">
+            <form method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" class="btn btn-primary" value="Submit">
+                <a href="{% url 'Core:project_index' %}" class="btn btn-default">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+
+{% block javascripts %}
+{{block.super}}
+<script src="/static/vendors/raphael/raphael.min.js"></script>
+<script src="/static/vendors/morris.js/morris.min.js"></script>
+{% endblock javascripts %}

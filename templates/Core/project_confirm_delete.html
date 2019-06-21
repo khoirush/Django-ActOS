@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+Delete Project
+{% endblock title %}
+
+{% block stylesheets %}
+{{block.super}}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Delete Project</h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_content">
+            <p>Are you sure to This Project ?</p>
+            <p>Project : {{ project.Title }}</p>
+            <p>Description : {{ project.Description }}</p>
+            <p>Start : {{ project.Start_Date }}</p>
+            <p>Finish : {{ project.End_Date }}</p>
+            <form method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" class="btn btn-danger" value="Delete">
+                <a href="{% url 'Core:project_index' %}" class="btn btn-default">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+
+{% block javascripts %}
+{{block.super}}
+<script src="/static/vendors/raphael/raphael.min.js"></script>
+<script src="/static/vendors/morris.js/morris.min.js"></script>
+{% endblock javascripts %}

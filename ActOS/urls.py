@@ -15,16 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 from . import views
+
+app_name = 'ActOS'
 
 urlpatterns = [
     path('', views.login_page, name='index'),
-    path('home/', views.home_page),
-    path('logout/', views.logout_view),
-    path('login/', views.login_view),
+    path('home/', views.home_page, name='home'),
+    path('logout/', views.logout_view, name='logout'),
+    path('login/', views.login_view, name='login'),
     path('ActOS/', include('Core.urls')),
     path('admin/', admin.site.urls),
 ]
 
 handler404 = views.handler404
 handler500 = views.handler500
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls))
+    ] + urlpatterns
