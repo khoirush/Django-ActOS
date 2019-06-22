@@ -19,12 +19,12 @@ Delete Project Task
     <div class="x_panel">
         <div class="x_content">
             <p>Are you sure to This Task ?</p>
-            <p>Project : {{ projecttask.project.Title }}</p>
+            <p>Project : {{ projecttask.ID_Project.Title }}</p>
             <p>Task : {{ projecttask.Description }}</p>
             <p>Priority : {{ projecttask.Priority }}</p>
             <p>PIC : {{projecttask.PIC}}</p>
             <p>Start : {{ projecttask.Start_Date }}</p>
-            <p>Finish : {{ projecttask.End_Date }}</p>
+            <p>Finish : {{ projecttask.TargetFinish_Date }}</p>
             <form method="post">
                 {% csrf_token %}
                 <input type="submit" class="btn btn-danger" value="Delete">
