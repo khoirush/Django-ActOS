@@ -3,7 +3,7 @@ from django.views.generic import (View, TemplateView,
                                   CreateView, DeleteView,
                                   UpdateView)
 from . import models
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 # from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -51,7 +51,7 @@ def add_model_form(request, model_form, template_link):
 
 # -------------- CBV - class based views
 class ProjectIndexView(TemplateView):
-    template_name = 'Project_index.html'
+    template_name = 'Core/Project_index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -85,3 +85,52 @@ class ProjectUpdateView(UpdateView):
 class ProjectDeleteView(DeleteView):
     model = Project
     success_url = reverse_lazy('Core:project_index')
+
+
+class TaskIndexView(TemplateView):
+    template_name = 'Core/projecttask_index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(views.get_user_context(self.request))
+
+        projects = Project.objects.all()
+        project_tasks = {}
+        for p in projects:
+            idx = p.ID_Project
+            project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
+        context['Projects'] = projects
+        context['Tasks'] = project_tasks
+
+        # context[""] =
+        return context
+
+
+class ProjectTaskDetailView(DetailView):
+    model = ProjectTask
+    template_name = 'Core/projecttask_detail.html'
+    context_object_name = 'projecttask_detail'
+
+
+class ProjectTaskCreateView(CreateView):
+    # fields = ('Title', 'Description', 'Total_Mandays',
+    #           'Start_Date', 'End_Date')
+    model = ProjectTask
+    form_class = ProjectTaskForm
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.ID_Project = Project.objects.get(
+            ID_Project=self.kwargs['ID_Project'])
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class ProjectTaskUpdateView(UpdateView):
+    model = ProjectTask
+    form_class = ProjectTaskForm
+
+
+class ProjectTaskDeleteView(DeleteView):
+    model = ProjectTask
+    success_url = reverse_lazy('Core:task_index')

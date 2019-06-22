@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-{% if not form.instance.pk %}
-Create New Project
-{% else %}
-Update Project
-{% endif %}
+Delete Project Task
 {% endblock title %}
 
 {% block stylesheets %}
@@ -16,26 +12,23 @@ Update Project
 <div class="right_col" role="main">
     <div class="page-title">
         <div class="title_left">
-            <h3>
-                {% block header %}
-                {% if not form.instance.pk %}
-                Create New Project
-                {% else %}
-                Update Project
-                {% endif %}
-                {% endblock header %}
-            </h3>
+            <h3>Delete This Task ?</h3>
         </div>
     </div>
     <div class="clearfix"></div>
     <div class="x_panel">
         <div class="x_content">
+            <p>Are you sure to This Task ?</p>
+            <p>Project : {{ projecttask.project.Title }}</p>
+            <p>Task : {{ projecttask.Description }}</p>
+            <p>Priority : {{ projecttask.Priority }}</p>
+            <p>PIC : {{projecttask.PIC}}</p>
+            <p>Start : {{ projecttask.Start_Date }}</p>
+            <p>Finish : {{ projecttask.End_Date }}</p>
             <form method="post">
                 {% csrf_token %}
-                {{form.as_ul}}
-                {% comment %} {% include 'forms/base_form.html' with form=form %} {% endcomment %}
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <a href="{% url 'Core:project_index' %}" class="btn btn-default">Cancel</a>
+                <input type="submit" class="btn btn-danger" value="Delete">
+                <a href="{% url 'Core:task_index' %}" class="btn btn-default">Cancel</a>
             </form>
 
         </div>

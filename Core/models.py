@@ -59,7 +59,8 @@ class Project(models.Model):
 
 class ProjectTask(models.Model):
     ID_Task = models.AutoField(primary_key=True)
-    ID_Project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    ID_Project = models.ForeignKey(
+        'Project', on_delete=models.CASCADE, related_name='project')
     Priority_level = [
         ('H', 'HIGH'),
         ('M', 'MEDIUM'),
@@ -97,6 +98,9 @@ class ProjectTask(models.Model):
         self.Total_Mandays = len(
             str.split(self.PIC, ',')) * self.Target_Duration
         super(ProjectTask, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('Core:task_index')
 
 
 class ProjectAssignment(models.Model):

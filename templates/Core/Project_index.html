@@ -28,8 +28,7 @@
                     <div class="x_title">
                         <h2>Projects - {{ p.Title }}</h2>
                         <ul class="nav navbar-right panel_toolbox">
-                            <li><a href="{% url 'Core:project_update' pk=p.ID_Project%}"
-                                    class="btn btn-default">Edit</a>
+                            <li><a href="{% url 'Core:project_update' slug=p.slug %}" class="btn btn-default">Edit</a>
                             </li>
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -44,6 +43,7 @@
                             <p>Description : {{ p.Description }}</p>
                             <p>Start : {{ p.Start_Date }}</p>
                             <p>Finish : {{ p.End_Date }}</p>
+                            <p>Total Mandays : {{ p.Total_Mandays }}</p>
                             <p class='small'>last update : {{ p.Last_Update }}</p>
                         </div>
                     </div>

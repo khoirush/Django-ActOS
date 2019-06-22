@@ -38,7 +38,7 @@ class ProjectForm(ModelForm):
 class ProjectTaskForm(ModelForm):
     class Meta:
         model = ProjectTask
-        fields = ['ID_Task', 'ID_Project', 'Title', 'Priority', 'Description', 'Status',
+        fields = ['Title', 'Priority', 'Description', 'Status',
                   'PctComplete', 'PctWeight', 'Start_Date', 'TargetFinish_Date', 'PIC'
                   ]
 

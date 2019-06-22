@@ -2,9 +2,9 @@
 
 {% block title %}
 {% if not form.instance.pk %}
-Create New Project
+Create New Task
 {% else %}
-Update Project
+Update Task
 {% endif %}
 {% endblock title %}
 
@@ -16,15 +16,7 @@ Update Project
 <div class="right_col" role="main">
     <div class="page-title">
         <div class="title_left">
-            <h3>
-                {% block header %}
-                {% if not form.instance.pk %}
-                Create New Project
-                {% else %}
-                Update Project
-                {% endif %}
-                {% endblock header %}
-            </h3>
+            <h3>Task Administration</h3>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -33,9 +25,8 @@ Update Project
             <form method="post">
                 {% csrf_token %}
                 {{form.as_ul}}
-                {% comment %} {% include 'forms/base_form.html' with form=form %} {% endcomment %}
                 <input type="submit" class="btn btn-primary" value="Submit">
-                <a href="{% url 'Core:project_index' %}" class="btn btn-default">Cancel</a>
+                <a href="{% url 'Core:task_index' %}" class="btn btn-default">Cancel</a>
             </form>
 
         </div>

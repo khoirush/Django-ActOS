@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load dict_filter %}
+
+{% block title %} Task : {{projecttask_detail.Title}} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Detail Task : {{projecttask_detail.Title}} </h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class='x_panel'>
+                    <table class="table-striped">
+                        <tr>
+                            <td>Project :</td>
+                            <td>{{projecttask_detail.ID_Project.Title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Priority :</td>
+                            <td>{{projecttask_detail.Priority}}</td>
+                        </tr>
+                        <tr>
+                            <td>Description :</td>
+                            <td>{{projecttask_detail.Description}}</td>
+                        </tr>
+                        <tr>
+                            <td>Status :</td>
+                            <td>{{projecttask_detail.Status}}</td>
+                        </tr>
+                        <tr>
+                            <td>% Completion :</td>
+                            <td>{{projecttask_detail.PctComplete|floatformat:0}}</td>
+                        </tr>
+                        <tr>
+                            <td>% Weight (in Overall Project %) :</td>
+                            <td>{{projecttask_detail.PctWeight|floatformat:0}}</td>
+                        </tr>
+                        <tr>
+                            <td>Start Date :</td>
+                            <td>{{projecttask_detail.Start_Date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Target Finish Date :</td>
+                            <td>{{projecttask_detail.TargetFinish_Date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Duration :</td>
+                            <td>{{projecttask_detail.Target_Duration}}</td>
+                        </tr>
+                        <tr>
+                            <td>Created on :</td>
+                            <td>{{projecttask_detail.Created_On}}</td>
+                        </tr>
+                        <tr>
+                            <td>Last Update on :</td>
+                            <td>{{projecttask_detail.Last_Update}}</td>
+                        </tr>
+                        <tr>
+                            <td>PIC :</td>
+                            <td>{{projecttask_detail.PIC}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Mandays :</td>
+                            <td>{{projecttask_detail.Total_Mandays}}</td>
+                        </tr>
+                    </table>
+
+                    <a href="{% url 'Core:task_index' %}" class="btn btn-default btn-xs"><i class="fa fa-backward"></i>
+                        Back
+                    </a>
+                    <a href="{% url 'Core:task_update' pk=projecttask_detail.ID_Task %}" class="btn btn-info btn-xs"><i
+                            class="fa fa-pencil"></i> Edit </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+
+    {% block javascripts %}
+    {{ block.super }}
+    <!-- morris.js -->
+    <script src="/static/vendors/raphael/raphael.min.js"></script>
+    <script src="/static/vendors/morris.js/morris.min.js"></script>
+    {% endblock javascripts %}
