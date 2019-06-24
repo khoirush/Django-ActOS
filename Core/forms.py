@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from .models import *
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
+from django.http import request, HttpRequest
 
 
 class PersonnelForm (ModelForm):
@@ -30,8 +31,6 @@ class ProjectForm(ModelForm):
                   'Description', 'Start_Date', 'End_Date']
         widgets = {
             'Description': forms.Textarea,
-            'Start_Date': forms.SelectDateWidget,
-            'End_Date': forms.SelectDateWidget
         }
 
 
@@ -46,16 +45,23 @@ class ProjectTaskForm(ModelForm):
 class ProjectAssignmentForm(ModelForm):
     class Meta:
         model = ProjectAssignment
-        fields = ['ID_Assignment', 'ID_Personnel',
-                  'ID_Project', 'is_PM', 'Start_Date', 'End_Date']
+        fields = ['ID_Personnel',
+                  'is_PM', 'Start_Date', 'End_Date']
+        label = ['Personnel', 'as a PM ?', 'Start_Date', 'End_Date']
 
 
 class ActivityLogForm(ModelForm):
     class Meta:
         model = ActivityLog
-        fields = ['ID_Activity', 'Activity_Date',
-                  'ID_Personnel', 'ID_Assignment']
+        fields = ['Activity_Date',
+                  'ID_Assignment', 'ID_ProjectTask', 'Location', 'Description']
 
+    # def __init__(self, *args, **kwargs):
+    #     super(ActivityLogForm, self).__init__(*args, **kwargs)
+    #     personnel = UserPersonnel.objects.get(ID_User=HttpRequest.user)
+    #     projects = ProjectAssignment.objects.filter(ID_Personnel=personnel)
+    #     tasks = ProjectTask.objects.filter(ID_Projects=projects)
+    #     self.fields['ID_ProjectTask'].queryset = tasks
 
 # class DetailActivityForm(ModelForm):
 #     class Meta:

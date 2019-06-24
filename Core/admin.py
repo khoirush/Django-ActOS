@@ -36,9 +36,9 @@ class ProjectTaskAdmin(admin.ModelAdmin):
 
 
 class ProjectAssignmentAdmin(admin.ModelAdmin):
-    list_display = ('ID_Assignment', 'ID_Personnel',
+    list_display = ('ID_Personnel',
                     'ID_Project', 'Start_Date', 'End_Date')
-    list_display_links = ('ID_Assignment', 'ID_Personnel',
+    list_display_links = ( 'ID_Personnel',
                           'ID_Project', 'Start_Date', 'End_Date')
 
 

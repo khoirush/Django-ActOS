@@ -34,7 +34,7 @@
         <li><a><i class="fa fa-edit"></i> Activity Log <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="/ActOS/InputAct">Input Activity</a></li>
-            <li><a href="/ActOS/view_activity.html">View Activity</a></li>
+            <li><a href="{% url 'Core:activity_index' %}">View Activity</a></li>
             <li><a href="/ActOS/approve_activity.html">Approve Activity Sheet</a></li>
           </ul>
         </li>
@@ -42,8 +42,7 @@
           <ul class="nav child_menu">
             <li><a href="{% url 'Core:project_index' %}">Project Administration</a></li>
             <li><a href="{% url 'Core:task_index' %}">Task Administration</a></li>
-            <li><a href="/ActOS/project_assignment.html">Personnel Assignment</a></li>
-            <li><a href="/ActOS/project_progress.html">Update Project Progress</a></li>
+            <li><a href="{% url 'Core:assignment_index' %}">Personnel Assignment</a></li>
           </ul>
         </li>
         <li><a><i class="fa fa-bar-chart-o"></i> Monitoring Dashboard <span class="fa fa-chevron-down"></span></a>

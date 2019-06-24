@@ -10,6 +10,7 @@ from django.utils import timezone
 from .forms import *
 from ActOS import views
 from django.urls import reverse_lazy
+
 # Create your views here.
 
 
@@ -20,10 +21,15 @@ def home_page(request):
 
 def input_activity(request):
     link = 'forms/inputAct.html'
-    return add_model_form(request, ActivityLogForm, link)
+    if request.user.is_authenticated:
+        # act_filter = ActivityLogFilter(request.GET, queryset=task)
+        context = views.get_user_context(request)
+        # context['filter'] = act_filter
+        return add_model_form(request, ActivityLogForm, link, context)
+    return home_page(request)
 
 
-def add_model_form(request, model_form, template_link):
+def add_model_form(request, model_form, template_link, contexts):
     if request.user.is_authenticated:
         obj_user = User.objects.get(username=request.user.username)
         obj_UserPerson = UserPersonnel.objects.get(ID_User=obj_user.id)
@@ -45,6 +51,7 @@ def add_model_form(request, model_form, template_link):
 
             form = model_form()
             context['form'] = form
+            # context['filter'] = contexts['filter']
             return render(request, template_link, context)
     return render(request, 'registration/login.html')
 
@@ -57,13 +64,13 @@ class ProjectIndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update(views.get_user_context(self.request))
 
-        projects = Project.objects.all()
-        project_tasks = {}
-        for p in projects:
-            idx = p.ID_Project
-            project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
-        context['Projects'] = projects
-        context['Tasks'] = project_tasks
+        # projects = Project.objects.all()
+        # project_tasks = {}
+        # for p in projects:
+        #     idx = p.ID_Project
+        #     project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
+        # context['Projects'] = projects
+        # context['Tasks'] = project_tasks
 
         # context[""] =
         return context
@@ -94,13 +101,16 @@ class TaskIndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update(views.get_user_context(self.request))
 
-        projects = Project.objects.all()
-        project_tasks = {}
-        for p in projects:
-            idx = p.ID_Project
-            project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
-        context['Projects'] = projects
-        context['Tasks'] = project_tasks
+        # projects = Project.objects.all()
+        # project_tasks = {}
+        # progress = {}
+        # for p in projects:
+        #     progress[p.ID_Project] = ProjectProgress(p.ID_Project)
+        #     idx = p.ID_Project
+        #     project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
+        # context['Projects'] = projects
+        # context['Tasks'] = project_tasks
+        # context['Progress'] = progress
 
         # context[""] =
         return context
@@ -134,3 +144,68 @@ class ProjectTaskUpdateView(UpdateView):
 class ProjectTaskDeleteView(DeleteView):
     model = ProjectTask
     success_url = reverse_lazy('Core:task_index')
+
+# --------------- PROJECT ASSIGNMENT
+
+
+class AssignmentIndexView(TemplateView):
+    template_name = 'Core/projectassignment_index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(views.get_user_context(self.request))
+
+        projects = context['Projects']
+        assigned_personnel = {}
+        for p in projects:
+            try:
+                assigned_personnel[p.ID_Project] = ProjectAssignment.objects.all().filter(
+                    ID_Project=p.ID_Project)
+            except:
+                print('error when query data to project assignment')
+        context['Projects'] = projects
+        context['Assignment'] = assigned_personnel
+        return context
+
+
+class ProjectAssignmentDetailView(DetailView):
+    model = ProjectAssignment
+    template_name = 'Core/projectassignment_detail.html'
+    context_object_name = 'projectassignment_detail'
+
+
+class ProjectAssignmentCreateView(CreateView):
+    # fields = ('Title', 'Description', 'Total_Mandays',
+    #           'Start_Date', 'End_Date')
+    model = ProjectAssignment
+    form_class = ProjectAssignmentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['Project'] = Project.objects.get(
+                ID_Project=self.kwargs['pid'])
+        except:
+            print(
+                f'Project Assignment Create : Error Retrieving Project where  ID_Project = {self.kwargs["pid"]}')
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.ID_Project = Project.objects.get(
+            ID_Project=self.kwargs['pid'])
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# class ProjectAssignmentUpdateView(UpdateView):
+#     model = ProjectAssignment
+#     form_class = ProjectAssignmentForm
+
+class ActivityLogIndexView(TemplateView):
+    template_name = 'Core/activitylog_index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(views.get_user_context(self.request))
+        return context

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load dict_filter %}
+
+
+{% block title %} Project Assignment {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Projects Assignment</h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                {% for p in Projects %}
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Projects - {{ p.Title }}</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="container">
+                            <p class="emphasis">Project : {{ p.Title }}</p>
+                            <p class="emphasis">Description : {{ p.Description }}</p>
+                            <p class="emphasis"><strong>Personnel Assigned : </strong></p>
+                            <!-- START LOOP PERSONNEL -->
+                            <ul class="list-inline">
+                                {% for pasgn in Assignment|lookup:p.ID_Project %}
+                                <li>
+                                    <div class="container">
+                                        <span class="btn btn-round btn-default btn-md">
+                                            <div class="col-sm-6">
+                                                <div class="left col-xs-3">
+                                                    <h4>{{ pasgn.ID_Personnel }}
+                                                        <!--  -->
+                                                    </h4>
+                                                    <p><strong>Role: </strong> {{ pasgn.ID_Personnel.Position }}</p>
+                                                    <button type="button" class="btn btn-primary btn-xs">
+                                                        <i class="fa fa-tasks"> </i> View Activity Log
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+
+                            <!-- END LOOP PERSONNEL -->
+                        </div>
+                        <a href="{% url 'Core:assignment_create' pid=p.ID_Project %}" class="btn btn-primary"><i
+                                class="fa fa-users"></i> Add Personnel Assignment</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+
+    {% block javascripts %}
+    {{ block.super }}
+    <!-- morris.js -->
+    <script src="/static/vendors/raphael/raphael.min.js"></script>
+    <script src="/static/vendors/morris.js/morris.min.js"></script>
+    {% endblock javascripts %}

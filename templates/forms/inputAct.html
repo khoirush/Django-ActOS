@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load dict_filter %}
+{% load widget_tweaks %}
 
 {% block title %} Home {% endblock title %}
 
@@ -29,9 +30,26 @@
                     <div class="x_content">
                         <!-- start form  -->
                         <form method="post">
+                            <!-- {% csrf_token %}
+                            {{form.as_p}} -->
                             {% csrf_token %}
-                            {{form.as_p}}
+                            {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                            {% endfor %}
+                            {% for field in form.visible_fields %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {% if field.id_for_label == 'id_Activity_Date' %}                                    
+                                    {% render_field field class='form-control' id='single_cal1' %}                                    
+                                {% else %}
+                                    {{ field|add_class:'form-control' }}
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
 
+                            {% endfor %}
                             <button type="submit" class="btn btn-default">Submit</button>
                         </form>
 

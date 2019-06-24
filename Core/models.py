@@ -25,6 +25,12 @@ class Personnel (models.Model):
         default='E'
     )
 
+    def __str__(self):
+        fname = '%s ' % self.First_Name
+        lname = '%s ' % self.Last_Name
+        fullname = fname + lname
+        return fullname
+
 
 class Customer(models.Model):
     ID_Customer = models.AutoField(primary_key=True)
@@ -56,11 +62,14 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('Core:project_index')
 
+    def __str__(self):
+        return '%s' % self.Title
+
 
 class ProjectTask(models.Model):
     ID_Task = models.AutoField(primary_key=True)
     ID_Project = models.ForeignKey(
-        'Project', on_delete=models.CASCADE, related_name='project')
+        'Project', on_delete=models.CASCADE, related_name='task')
     Priority_level = [
         ('H', 'HIGH'),
         ('M', 'MEDIUM'),
@@ -102,18 +111,26 @@ class ProjectTask(models.Model):
     def get_absolute_url(self):
         return reverse('Core:task_index')
 
+    def __str__(self):
+        return self.Title
+
 
 class ProjectAssignment(models.Model):
-    ID_Assignment = models.CharField(max_length=10)
     ID_Personnel = models.ForeignKey(
-        to='Personnel', on_delete=models.PROTECT)
+        to='Personnel', on_delete=models.PROTECT, related_name='assigned_project')
     ID_Project = models.ForeignKey(
-        to='Project', on_delete=models.PROTECT)
+        to='Project', on_delete=models.PROTECT, related_name='assigned_team')
     is_PM = models.BooleanField(default=False)
     Start_Date = models.DateField(blank=False)
     End_Date = models.DateField(blank=False)
     Created_On = models.DateTimeField(auto_now_add=True)
     Last_Update = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('Core:assignment_index')
+
+    def __str__(self):
+        return self.ID_Project.Title
 
 
 class ActivityLog(models.Model):
@@ -121,7 +138,7 @@ class ActivityLog(models.Model):
     Activity_Date = models.DateField(blank=False, unique=True)
     ID_Personnel = models.ForeignKey(to='Personnel', on_delete=models.CASCADE)
     ID_Assignment = models.ForeignKey(
-        to='ProjectAssignment', on_delete=models.CASCADE)
+        to='ProjectAssignment', on_delete=models.CASCADE, related_name='assignment')
     ID_ProjectTask = models.ForeignKey(
         to='ProjectTask', on_delete=models.DO_NOTHING)
     Description = models.TextField(blank=True)

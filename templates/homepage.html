@@ -37,8 +37,8 @@
             <p>{{ p.Description }}</p>
 
             <!-- start project list -->
-            
-            <table class="table table-striped projects">            
+
+            <table class="table table-striped projects">
               <thead>
                 <tr>
                   <th style="width: 1%">#</th>
@@ -50,30 +50,30 @@
                   <th style="width: 20%">#Edit</th>
                 </tr>
               </thead>
-              <tbody>                
-                {% comment %} {% for k, v in Tasks.items %}                               {% endcomment %}
+              <tbody>
+                {% comment %} {% for k, v in Tasks.items %} {% endcomment %}
                 {% comment %} {% for t in v %} {% endcomment %}
                 {% for t in Tasks|lookup:p.ID_Project %}
-                                
+
                 <tr>
                   <td>#</td>
                   <td>
-                    <a>{{ t.Title }}</a>
+                    <a href="{{t.ID_Task}}">{{ t.Title }}</a>
                     <br />
                     <small>Created On {{ t.Created_On|date:"d M Y" }}</small>
                   </td>
                   {% if t.Priority == 'H' %}
-                    <td><span class="label label-danger">High</span></td>
-                  {% elif t.Priority == 'M' %}                  
-                    <td><span class="label label-warning">Medium</span></td>
+                  <td><span class="label label-danger">High</span></td>
+                  {% elif t.Priority == 'M' %}
+                  <td><span class="label label-warning">Medium</span></td>
                   {% else %}
-                    <td><span class="label label-info">Low</span></td>
-                  {% endif %}                  
+                  <td><span class="label label-info">Low</span></td>
+                  {% endif %}
                   <td>
                     <ul class="list-inline">
-                      {% for pic in t.PIC|splitby:','  %}                                            
+                      {% for pic in t.PIC|splitby:','  %}
                       <li>
-                        <span class="btn btn-primary btn-xs">{{ pic }}</span>                        
+                        <span class="btn btn-primary btn-xs">{{ pic }}</span>
                       </li>
                       {% endfor %}
                       {% comment %} <li>
@@ -85,7 +85,7 @@
                       <li>
                         <img src="/static/images/user.png" class="avatar" alt="Avatar">
                       </li> {% endcomment %}
-                      
+
                     </ul>
                   </td>
                   <td class="project_progress">
@@ -96,22 +96,24 @@
                     <small>{{ t.PctComplete|floatformat:0 }}% Complete</small>
                   </td>
                   <td>
-                  {% if t.Status == 'OG' %}
+                    {% if t.Status == 'OG' %}
                     <button type="button" class="btn btn-success btn-xs">On-Going</button>
-                  {% elif t.Status == 'PD' %}                  
+                    {% elif t.Status == 'PD' %}
                     <button type="button" class="btn btn-success btn-xs">Pending</button>
-                  {% else %}
+                    {% else %}
                     <button type="button" class="btn btn-success btn-xs">Done</button>
-                  {% endif %}                     
+                    {% endif %}
                   </td>
                   <td>
-                    <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                     <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                    <a href="#" class="btn btn-success btn-xs"><i class="fa fa-line-chart"></i>
+                      Update Progress
+                    </a>
                     <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                   </td>
                 </tr>
-                
-                {% comment %} {% endfor %}   {% endcomment %}
+
+                {% comment %} {% endfor %} {% endcomment %}
                 {% endfor %}
               </tbody>
             </table>

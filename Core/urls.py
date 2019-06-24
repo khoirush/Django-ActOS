@@ -22,5 +22,12 @@ urlpatterns = [
          name='task_update'),
     path('tsk/del/<int:pk>', views.ProjectTaskDeleteView.as_view(),
          name='task_delete'),
+    path('asgnmnt/cr/<int:pid>', views.ProjectAssignmentCreateView.as_view(),
+         name='assignment_create'),
+    path('asgnmnt/', views.AssignmentIndexView.as_view(),
+         name='assignment_index'),
+    path('asgnmnt/pr/<int:pid>/detail', views.ProjectAssignmentDetailView.as_view(),
+         name='assignment_detail'),
+    path('actlog/', views.ActivityLogIndexView.as_view(), name='activity_index'),
 
 ]

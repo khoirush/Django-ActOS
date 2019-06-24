@@ -1,11 +1,8 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+
 {% block title %}
-{% if not form.instance.pk %}
-Create New Project
-{% else %}
-Update Project
-{% endif %}
+New Personnel Assignment
 {% endblock title %}
 
 {% block stylesheets %}
@@ -16,15 +13,7 @@ Update Project
 <div class="right_col" role="main">
     <div class="page-title">
         <div class="title_left">
-            <h3>
-                {% block header %}
-                {% if not form.instance.pk %}
-                Create New Project
-                {% else %}
-                Update Project
-                {% endif %}
-                {% endblock header %}
-            </h3>
+            <h3>Personnel Assignment - Project {{Project.Title}}</h3>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -38,13 +27,13 @@ Update Project
                 {% for field in form.visible_fields %}
                 <div class="form-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {% if field.id_for_label == 'id_Start_Date' %}                                                            
-                            {% render_field field class='form-control' id='single_cal1' %}                                    
-                        {% elif field.id_for_label == 'id_End_Date' %}
-                            {% render_field field class='form-control' id='single_cal2' %}
-                        {% else %}
-                            {{ field|add_class:'form-control' }}
-                        {% endif %}
+                    {% if field.id_for_label == 'id_Start_Date' %}
+                    {% render_field field class='form-control' id='single_cal1' %}
+                    {% elif field.id_for_label == 'id_End_Date' %}
+                    {% render_field field class='form-control' id='single_cal2' %}
+                    {% else %}
+                    {{ field|add_class:'form-control' }}
+                    {% endif %}
                     {% for error in field.errors %}
                     <span class="help-block">{{ error }}</span>
                     {% endfor %}
@@ -52,7 +41,7 @@ Update Project
 
                 {% endfor %}
                 <input type="submit" class="btn btn-primary" value="Submit">
-                <a href="{% url 'Core:project_index' %}" class="btn btn-default">Cancel</a>
+                <a href="{% url 'Core:assignment_index' %}" class="btn btn-default">Cancel</a>
             </form>
 
         </div>

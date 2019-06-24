@@ -35,6 +35,14 @@
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
                         </ul>
+                        <br>
+                        <br>
+                        <div class="progress progress_sm">
+                            <div class="progress-bar bg-blue" role="progressbar"
+                                data-transitiongoal="{{ Progress|lookup:p.ID_Project }}">
+                            </div>
+                        </div>
+                        <small>{{ Progress|lookup:p.ID_Project }}% Complete</small>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">

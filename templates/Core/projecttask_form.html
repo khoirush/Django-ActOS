@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load widget_tweaks %}
 {% block title %}
 {% if not form.instance.pk %}
 Create New Task
@@ -24,7 +24,25 @@ Update Task
         <div class="x_content">
             <form method="post">
                 {% csrf_token %}
-                {{form.as_ul}}
+                {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.id_for_label == 'id_Start_Date' %}
+                    {% render_field field class='form-control' id='single_cal1' %}
+                    {% elif field.id_for_label == 'id_TargetFinish_Date' %}
+                    {% render_field field class='form-control' id='single_cal2' %}
+                    {% else %}
+                    {{ field|add_class:'form-control' }}
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                {% endfor %}
                 <input type="submit" class="btn btn-primary" value="Submit">
                 <a href="{% url 'Core:task_index' %}" class="btn btn-default">Cancel</a>
             </form>

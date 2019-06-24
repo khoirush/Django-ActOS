@@ -23,13 +23,22 @@
                 {% for p in Projects %}
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Projects - {{ p.Title }}</h2>
+                        <h2>Projects - {{ p.Title }}
+                        </h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
                         </ul>
+                        <br>
+                        <br>
+                        <div class="progress progress_sm">
+                            <div class="progress-bar bg-blue" role="progressbar"
+                                data-transitiongoal="{{ Progress|lookup:p.ID_Project }}">
+                            </div>
+                        </div>
+                        <small>{{ Progress|lookup:p.ID_Project }}% Complete</small>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -45,6 +54,7 @@
                                     <th style="width: 20%">Task</th>
                                     <th>Priority</th>
                                     <th>PIC</th>
+                                    <th>Weight</th>
                                     <th>Project Progress</th>
                                     <th>Status</th>
                                     <th style="width: 20%">#Edit</th>
@@ -58,7 +68,7 @@
                                 <tr>
                                     <td>#</td>
                                     <td>
-                                        <a>{{ t.Title }}</a>
+                                        <a href="{{t.ID_Task}}">{{ t.Title }}</a>
                                         <br />
                                         <small>Created On {{ t.Created_On|date:"d M Y" }}</small>
                                     </td>
@@ -88,6 +98,9 @@
 
                                         </ul>
                                     </td>
+                                    <td>
+                                        {{t.PctWeight|floatformat:0}}
+                                    </td>
                                     <td class="project_progress">
                                         <div class="progress progress_sm">
                                             <div class="progress-bar bg-green" role="progressbar"
@@ -106,11 +119,11 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a href="{{t.ID_Task}}" class="btn btn-primary btn-xs"><i
-                                                class="fa fa-folder"></i> View
-                                        </a>
                                         <a href="{% url 'Core:task_update' pk=t.ID_Task %}"
                                             class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                        <a href="#" class="btn btn-success btn-xs"><i class="fa fa-line-chart"></i>
+                                            Update Progress
+                                        </a>
                                         <a href="{% url 'Core:task_delete' pk=t.ID_Task %}"
                                             class=" btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete
                                         </a>

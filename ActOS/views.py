@@ -29,10 +29,32 @@ def get_user_context(request):
         obj_personnel = Personnel.objects.get(
             ID_Personnel=idp)
         context = {}
+        context['user'] = user
+        context['id_personnel'] = obj_personnel
         context['fname'] = obj_personnel.First_Name
         context['lname'] = obj_personnel.Last_Name
         context['fullname'] = str(obj_personnel.First_Name) + \
             str(obj_personnel.Last_Name)
+        projects = []
+        assignment_list = ProjectAssignment.objects.all().filter(
+            ID_Personnel=context['id_personnel'])
+        list_id_project = []
+        for asg in assignment_list.values('ID_Project'):
+            list_id_project.append(asg['ID_Project'])
+        if not request.user.is_superuser:
+            projects.append(Project.objects.get(
+                ID_Project__in=list_id_project))
+        else:
+            projects = Project.objects.all()
+        project_tasks = {}
+        progress = {}
+        for p in projects:
+            progress[p.ID_Project] = ProjectProgress(p.ID_Project)
+            idx = p.ID_Project
+            project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
+        context['Progress'] = progress
+        context['Projects'] = projects
+        context['Tasks'] = project_tasks
     return context
 
 
@@ -67,14 +89,7 @@ def home_page(request):
     context = get_user_context(request)
     if context:
         # get project object
-        projects = []
-        projects = Project.objects.all()
-        project_tasks = {}
-        for p in projects:
-            idx = p.ID_Project
-            project_tasks[idx] = ProjectTask.objects.filter(ID_Project=idx)
-        context['Projects'] = projects
-        context['Tasks'] = project_tasks
+
         return render(request, 'homepage.html', context)
     # breakpoint()
     return login_page(request)
@@ -86,3 +101,23 @@ def handler404(request, exception):
 
 def handler500(request):
     return render(request, '500.html', status=500)
+
+
+class ProjectProgress():
+    def __init__(self, ID_Project):
+        self.ID_Project = ID_Project
+        self.Progress = self.calculate_progress()
+
+    def __str__(self):
+        return str('%.2f' % self.Progress)
+
+    def calculate_progress(self):
+        prg = 0
+        proj = Project.objects.get(ID_Project=self.ID_Project)
+        total_weight = 0
+        total_complete = 0
+        for t in proj.task.all():
+            total_weight += t.PctWeight
+            total_complete += t.PctComplete * t.PctWeight / 100
+        prg = total_complete / total_weight * 100
+        return prg
